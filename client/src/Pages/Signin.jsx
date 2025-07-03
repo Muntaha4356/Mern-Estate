@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
+import {useDispatch} from 'react-redux'
+import { signInSuccess, signInFailure, signInStart } from '../redux/userSlices/userSlice';
+
 
 const Signin = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -17,6 +21,7 @@ const Signin = () => {
   };
   const handleSubmit =async (e)=>{
     e.preventDefault();
+    dispatch(signInStart());
     setLoading(true);
     try{
       const response = await fetch('http://localhost:3000/api/auth/login', {
@@ -29,11 +34,13 @@ const Signin = () => {
       });
       const result = await response.json();
       if(result.success){
+        dispatch(signInSuccess(result.user)); 
         alert("Logged in successfully!");
         setError(null);
         navigate('/');
 
       }else {
+        dispatch(signInFailure(result.message));
         alert(`Error: ${result.message}`);
         setError(result.message)
       
@@ -42,6 +49,7 @@ const Signin = () => {
 
     }
     catch (err) {
+      dispatch(signInFailure(err.message || 'Something went wrong'));
       alert('Login failed. Please try again.');
       setLoading(false);
       setError(err);

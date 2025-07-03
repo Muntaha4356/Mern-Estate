@@ -31,7 +31,14 @@ export const login = async (req, res)=>{
                 maxAge: 7 * 24 * 60 * 60 * 1000, //After 7days it should expire
                         
             })
-            return res.json({success: true});
+            return res.json({success: true,
+                user: {
+                _id: userExist._id,
+                name: userExist.name,
+                email: userExist.email,
+                // any other fields you want (but NOT password)
+            }
+            });
     }catch(error){
         res.json({success: false, message: error.message})       
     }

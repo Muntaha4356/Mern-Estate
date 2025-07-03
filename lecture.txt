@@ -1,0 +1,29 @@
+redux: to access info across different pages
+
+signInStart: (state)=>{
+            state.loading = true; 
+        },
+this reducer is aboutthe  signin 
+
+
+
+#REDUX:
+Imagine you run a lemonade stand 🍋.
+
+Store = Your lemonade box that keeps everything: lemons, sugar, cups.
+
+State = What’s inside the box (e.g., 5 lemons, 2 cups of sugar).
+
+Action = A message like “Add more lemons” or “Use 1 cup of sugar”.
+
+Reducer = A machine that reads the message and changes the items inside the box accordingly.
+
+
+
+Concept	Simple Meaning	Real Use
+configureStore()	Creates your main box (store)	Holds all your state
+createSlice()	Creates the message machine (reducer + actions)	Groups logic + state
+createAsyncThunk()	Helps with async stuff like API calls	Handles loading/data/errors
+useSelector()	Lets you read from the store	Example: const user = useSelector(...)
+useDispatch()	Lets you send actions to the store	Example: dispatch(addLemon())
+
