@@ -1,33 +1,44 @@
-import jwt from 'jsonwebtoken';
-import { OAuth2Client } from 'google-auth-library';
-import userModel from '../models/usersmodel.js';
 
-const client = new OAuth2Client('244631017859-845o6r2dug776piglqkq0cm6q1sbbtai.apps.googleusercontent.com')
+import jwt from "jsonwebtoken";
+import userModel from "../models/usersmodel.js"
+import bcrypt from "bcryptjs";
 
-export const handleGoogleLogin = async(req, res) =>{
-    const {token} = req.body;
-    try{
-        const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: '244631017859-845o6r2dug776piglqkq0cm6q1sbbtai.apps.googleusercontent.com', // Same as client ID
-    });
-    const { email, name} = ticket.getPayload();
 
-    let user = await userModel.findOne({email});
-    if (!user) {
-      user = await user.create({
-        email,
-        name: name,
+
+
+export const handleGoogleLogin = async (req, res, next)=>{
+  try{
+    const user = await userModel.findOne({email: req.body.email});
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      //WE DON'T WANNA SEND THE PASSWORD SO WE ARE SEPARATING IT
+      const {password:pass, ...rest} = user._docs;
+      res
+      .cookie('access_token', token, {httpOnly: true})
+      .status(200)
+      .json(rest);
+
+
+      console.log("sgnedin")
+    }else{
+      //we are here creating a random password
+      const generatedPassword = Math.random().toString(35).slice(-9) + Math.random().toString(35).slice(-9); //getting last nine digits
+      const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
+      //converting "sidra tul muntaha" to "sidratulmuntah346"
+      const newUser = new userModel({username: req.body.name.split(" ").join("").toLowerCase()+ 
+        Math.random().toString(35).slice(-4), 
+        email: req.body.email, 
+        password: hashedPassword, 
+        profilepic: req.body.photo
       });
+      await newUser.save();
+      const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET);
+      const {password: pass, ...rest} = newUser._docs;
+      res.cookie('access_token', token, {httpOnly:  true}).status(200).json(rest);
+      conaole.log("signed up");
 
     }
-    const userToken = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET, // ideally use process.env.JWT_SECRET
-      { expiresIn: '7d' }
-    );
-
-    }catch(error){
-        res.json({success: false, message: error.message})
-    }
+  }catch(error){
+    console.log("helo")
+  }
 }

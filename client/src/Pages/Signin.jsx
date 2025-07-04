@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
 import {useDispatch} from 'react-redux'
 import { signInSuccess, signInFailure, signInStart } from '../redux/userSlices/userSlice';
+import OAuth from '../Components/OAuth';
 
 
 const Signin = () => {
@@ -80,10 +81,7 @@ const Signin = () => {
         className='bg-red-400 border-none p-3 rounded-2xl'>
           {loading ? 'Loading...' : 'SignIn'}
         </button>
-        <button 
-        className='border-none p-3 rounded-2xl bg-red-500'>
-          Continue with Google
-        </button>
+        <OAuth/>
       </form>
       <p className='p-3'>Don't Have an Account? <Link to={'/signup'}>Sign Up</Link></p>
       {error && <p className='text-red-500 mt-5'>{error}</p>}

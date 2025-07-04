@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import { useState } from 'react'
+import OAuth from '../Components/OAuth';
 const Signup = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -85,10 +86,7 @@ const Signup = () => {
         className='bg-red-400 border-none p-3 rounded-2xl'>
           {loading ? 'Loading...' : 'SignUp'}
         </button>
-        <button 
-        className='border-none p-3 rounded-2xl bg-red-500'>
-          Continue with Google
-        </button>
+        <OAuth />
       </form>
       <p className='p-3'>Have an Account? <Link to={'/signin'}>Sign in</Link></p>
       {error && <p className='text-red-500 mt-5'>{error}</p>}
