@@ -9,7 +9,7 @@ const Profile = () => {
     const [userId, setUserId] = useState('');
     const [previewUrl, setPreviewUrl] = useState('');
     const fileRef = useRef(null);
-
+    const [photo, setPhoto] = useState(null);
     useEffect(() => {
   const fetchUser = async () => {
     try {
@@ -81,6 +81,31 @@ const Profile = () => {
       }
     };
 
+    const handlesImageChange = (e) =>{
+      if(e.target.files){
+        setPhoto(e.target.files[0]);
+
+      }
+    }
+    console.log("Image: ", photo);
+    const handleImageSubmit = () =>{
+      const formData = new FormData();
+      formData.append("image", photo);
+
+      fetch('http://localhost:3000/api/uploadimage',{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: formData
+      }).then(response =>{
+        if(!response.ok){
+          throw new Error("Response wasn't okay")
+        }
+        return response.json();
+      })
+    }
+
   return (
     <section className="max-w-lg mx-auto p-4">
       <h1 className="text-3xl font-semibold text-center my-6">Profile</h1>
@@ -92,8 +117,9 @@ const Profile = () => {
         type="file"
         id="profile-upload"
         accept="image/*"
-        onChange={(e)=>setProfilepic(e.target.files[0])}
-        className=""
+        onChange={handlesImageChange}
+       
+        name="profileimage"
       />
         <img
         onClick={()=>fileRef.current.click()}
@@ -102,6 +128,9 @@ const Profile = () => {
         alt="profile"
         className="w-20 h-20 rounded-full object-cover border"
       />
+      <button onClick={handleImageSubmit}>
+        submit
+      </button>
 
       </div>
         
