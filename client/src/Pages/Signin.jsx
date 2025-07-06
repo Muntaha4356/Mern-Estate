@@ -34,8 +34,12 @@ const Signin = () => {
         credentials: 'include',
       });
       const result = await response.json();
+      console.log(result);
       if(result.success){
-        dispatch(signInSuccess(result.user)); 
+        console.log("ewww bee");
+        
+        localStorage.setItem("token", result.token);
+        dispatch(signInSuccess({ user: result.user, token: result.token })); 
         alert("Logged in successfully!");
         setError(null);
         navigate('/');

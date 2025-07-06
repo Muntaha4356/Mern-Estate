@@ -10,7 +10,7 @@ const userRoutes= express.Router();
 
 userRoutes.get('/data', userAuth, getUserData)
 userRoutes.put('/updateUser',userAuth, upload.single('profilepic'), upDateUser)
-userRoutes.post('/upload-image', upload.single('image'), imageUpload)
+userRoutes.post('/upload-image',userAuth, upload.single('image'), imageUpload)
 
 
 export default userRoutes;

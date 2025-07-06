@@ -27,3 +27,8 @@ createAsyncThunk()	Helps with async stuff like API calls	Handles loading/data/er
 useSelector()	Lets you read from the store	Example: const user = useSelector(...)
 useDispatch()	Lets you send actions to the store	Example: dispatch(addLemon())
 
+\\multer.js=> server/middleware/upload.js
+
+
+
+in useAuth middleware i have added method of token

@@ -37,7 +37,7 @@ export const login = async (req, res)=>{
                 name: userExist.name,
                 email: userExist.email,
                 // any other fields you want (but NOT password)
-            }
+            }, token: token_applied
             });
     }catch(error){
         res.json({success: false, message: error.message})       
