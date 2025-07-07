@@ -6,8 +6,7 @@ import connectDb from "./config/connect.js";
 import authRouter from './routes/authenticationRoute.js'
 import userRoutes from "./routes/userRoute.js";
 import dns from 'dns';
-import { error } from "console";
-import multer from "multer";
+import listRoutes from "./routes/listingRoutes.js";
 const app = express();
 
 const port =process.env.PORT || 3000;
@@ -26,7 +25,7 @@ app.use(cors({
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRoutes);
-
+app.use('/api/list',listRoutes);
 
 
 //middleware to handle errors..not gonna use
