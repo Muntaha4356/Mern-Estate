@@ -9,6 +9,7 @@ import { resetPassword, resetPasswordOtpSend } from '../controller/resetPassword
 import { getUserData } from '../controller/useInfoController.js';
 import { isLoggedIn } from '../controller/isLoggedIn.js';
 import { handleGoogleLogin } from '../controller/GoogleAuth.js';
+import userAuth2 from '../middleware/useAuth2.js';
 
 const authRouter = express.Router();
 

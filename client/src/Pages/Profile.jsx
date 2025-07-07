@@ -1,56 +1,70 @@
 import React, { useEffect, useState, useRef } from 'react'
-
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
-  
+    const navigate =useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [profilepic, setProfilepic] = useState('');
     const [userId, setUserId] = useState('');
-    const [previewUrl, setPreviewUrl] = useState('');
     const fileRef = useRef(null);
-    const [photo, setPhoto] = useState(null);
+    const [image, setImage] = useState();
+    const [currentUser, setCurrentUser] = useState();
+    
     useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const res = await fetch('http://localhost:3000/api/user/data', {
-  method: 'GET',
-  credentials: 'include' 
-}
-      );
-      const data = await res.json();
-      if (data.success) {
-        console.log(data.user);
-        // optionally set state here
-        const user = data.userData;
-        setName(user.name);
-        setEmail(user.email);
-        setProfilepic(user.profilepic);
-        setUserId(user._id);
-      } else {
-        alert(data.message);
-      }
-    } catch (error) {
-      console.log(error);
+      const fetchUser = async () => {
+        try {
+          const res = await fetch('http://localhost:3000/api/user/data', {
+      method: 'GET',
+      credentials: 'include' 
     }
-  };
+          );
+          const data = await res.json();
+          if (data.success) {
+            console.log(data.user);
+            // optionally set state here
+            const user = data.userData;
+            setName(user.name);
+            setEmail(user.email);
+            setUserId(user._id);
+          } else {
+            alert(data.message);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
-  fetchUser(); // ✅ CALL IT HERE
-}, []);
+      fetchUser(); // ✅ CALL IT HERE
+    }, []);
 
+
+    useEffect(() => {
+        axios
+          .get("http://localhost:3000/api/auth/isLoggedIn", { withCredentials: true }) 
+          .then((res) => {
+            console.log(res.success);
+            setCurrentUser(res.data.user);
+          })
+          .catch((err) => {
+            console.error("Auth check failed:", err.message);
+          });
+      }, []);
 
     const handleUpdate = async (e) => {
       e.preventDefault(); // prevent form refresh
 
-      const formData = new FormData();
-      formData.append('userId', userId);
-      formData.append('name', name);
-      formData.append('profilepic', profilepic); // this is the File object
+      // formData.append('profilepic', profilepic); // this is the File object
+      const updatedUser = {
+        userId,
+        name
+      };
 
       try {
         const res = await fetch('http://localhost:3000/api/user/updateUser', {
           method: 'PUT',
-          body: formData, // don't set Content-Type manually
+          body: JSON.stringify(updatedUser), // don't set Content-Type manually
+          credentials: 'include' 
         });
 
         const data = await res.json();
@@ -66,46 +80,83 @@ const Profile = () => {
       }
     };
 
-    const handleImageChange = (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        setProfilepic(file); // send actual file to backend
-        const preview = URL.createObjectURL(file);
-        setPreviewUrl(preview); // for preview
-        // Optional: show preview
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          document.getElementById('profile-preview').src = reader.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-
-    const handlesImageChange = (e) =>{
+    const handleChange =(e) =>{
       if(e.target.files){
-        setPhoto(e.target.files[0]);
-
+        setImage(e.target.files[0]);
       }
     }
-    console.log("Image: ", photo);
-    const handleImageSubmit = () =>{
-      const formData = new FormData();
-      formData.append("image", photo);
+    const onSubmit = async () =>{
+    if(!image) {
+      alert("Please select an image");
 
-      fetch('http://localhost:3000/api/uploadimage',{
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: formData
-      }).then(response =>{
-        if(!response.ok){
-          throw new Error("Response wasn't okay")
-        }
-        return response.json();
-      })
+      return;
     }
 
+    const formData = new FormData();
+    formData.append("image", image);
+    const response = await fetch("http://localhost:3000/api/user/upload-image", {
+    method: "PUT",
+    body: formData,
+    credentials: 'include'  // ✅ cookie-based
+  });
+    const result = await response.json();
+    if(result.success){
+            alert("Logged in successfully!");
+            
+    
+          }else {
+            alert(`Error: ${result.message}`);
+            
+          
+          }
+  }
+   const handleDelete = async (emailvalue) =>{
+      console.log(emailvalue);
+      try{
+        const res=await fetch("http://localhost:3000/api/user/delete", {
+          method:"PUT",
+          headers:{
+            "Content-Type":"application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({email: emailvalue})
+        });
+        const data = await res.json();
+        if(data.success){
+          alert("User Deleted Successfully");
+          localStorage.clear();
+          navigate("/signin");
+        }else{
+          alert("Error: "+ data.message)
+        }
+      }catch(error){
+        console.log(error);
+        
+      }
+   }
+
+    const handleLogout = async(e)=>{
+    try{
+      const response = await fetch('http://localhost:3000/api/auth/logout', {
+        method:'POST',
+        credentials: 'include',
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      })
+      const result = await response.json();
+      if(result.success){
+        alert('LogOut');
+        navigate('/unauth');
+      }else {
+        alert(`Error: ${result.message}`);
+      }
+    }catch(error) {
+          console.error(error);
+          alert('Logged out failed. Try again later.');
+        }
+  }
+   
   return (
     <section className="max-w-lg mx-auto p-4">
       <h1 className="text-3xl font-semibold text-center my-6">Profile</h1>
@@ -117,18 +168,19 @@ const Profile = () => {
         type="file"
         id="profile-upload"
         accept="image/*"
-        onChange={handlesImageChange}
+        onChange={handleChange}
+        hidden
        
         name="profileimage"
       />
         <img
         onClick={()=>fileRef.current.click()}
         id="profile-preview"
-        src={previewUrl || typeof profilepic=='string' ? profilepic : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
+        src={currentUser?.profilepic || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
         alt="profile"
         className="w-20 h-20 rounded-full object-cover border"
       />
-      <button onClick={handleImageSubmit}>
+      <button onClick={onSubmit}>
         submit
       </button>
 
@@ -138,7 +190,7 @@ const Profile = () => {
           type="text"
           placeholder="Username"
           className="border p-3 rounded-lg"
-          name='username'
+          name='name'
           value={name} onChange={(e) => setName(e.target.value)}
         />
         <input
@@ -161,9 +213,9 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between mt-6 text-sm">
-        <span className="text-red-700 cursor-pointer">Delete Account</span>
+        <span onClick={()=>handleDelete(email)} className="text-red-700 cursor-pointer">Delete Account</span>
         <span className="text-blue-600 cursor-pointer">Show Listings</span>
-        <span className="text-red-500 cursor-pointer">Sign out</span>
+        <span onClick={handleLogout} className="text-red-500 cursor-pointer">Sign out</span>
       </div>
     </section>
   )
