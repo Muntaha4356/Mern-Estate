@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 const Profile = () => {
     const navigate =useNavigate();
     const [name, setName] = useState('');
@@ -95,9 +95,9 @@ const Profile = () => {
     const formData = new FormData();
     formData.append("image", image);
     const response = await fetch("http://localhost:3000/api/user/upload-image", {
-    method: "PUT",
+    method: "POST",
     body: formData,
-    credentials: 'include'  // ✅ cookie-based
+    credentials: 'include'
   });
     const result = await response.json();
     if(result.success){
@@ -208,13 +208,13 @@ const Profile = () => {
         className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90">
           Update
         </button>
-        <button className="bg-green-700 text-white p-3 rounded-lg uppercase hover:opacity-90">
+        <Link to='/list' className="bg-green-700 text-white text-center p-3 rounded-lg uppercase hover:opacity-90">
           Create Listing
-        </button>
+        </Link>
       </form>
       <div className="flex justify-between mt-6 text-sm">
         <span onClick={()=>handleDelete(email)} className="text-red-700 cursor-pointer">Delete Account</span>
-        <span className="text-blue-600 cursor-pointer">Show Listings</span>
+        <Link  className="text-blue-600 cursor-pointer">Show Listings</Link>
         <span onClick={handleLogout} className="text-red-500 cursor-pointer">Sign out</span>
       </div>
     </section>
