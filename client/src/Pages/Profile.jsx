@@ -214,7 +214,7 @@ const Profile = () => {
       </form>
       <div className="flex justify-between mt-6 text-sm">
         <span onClick={()=>handleDelete(email)} className="text-red-700 cursor-pointer">Delete Account</span>
-        <Link  className="text-blue-600 cursor-pointer">Show Listings</Link>
+        <Link to='/userlist'  className="text-blue-600 cursor-pointer">Show Listings</Link>
         <span onClick={handleLogout} className="text-red-500 cursor-pointer">Sign out</span>
       </div>
     </section>

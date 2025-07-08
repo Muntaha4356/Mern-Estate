@@ -33,7 +33,7 @@ const About = () => {
             alert(`Error: ${result.message}`);
             
           
-          }
+          }                       
   }
   return (
     <div>

@@ -7,6 +7,6 @@ export const createListing = async(req,res)=>{
         const listing = await Listing.create(req.body);
         return res.json(listing);
     }catch(err){
-        res.json({success:true, message: err.message});
+        res.json({success:false, message: err.message});
     }
 }

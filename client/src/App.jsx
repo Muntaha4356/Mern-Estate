@@ -10,6 +10,7 @@ import About from './Pages/About'
 import ProtectedRoute from '../../../Mern-Auth/client/vite-project/src/Components/protectionFunctions/ProtectedRoute'
 import UnProtectedRoute from '../../../Mern-Auth/client/vite-project/src/Components/protectionFunctions/UnprotectedRoute'
 import CreateListing from './Pages/CreateListing'
+import ListingCards from './Pages/ListingCards'
 function App() {
 
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path='/about' element={<About/>}/>
             <Route path='/profile' element={<Profile/>}/>
             <Route path='/list' element={<CreateListing/> }/>
+            <Route path='/userlist' element={<ListingCards/>  }/>
           </Route>
           <Route element={<UnProtectedRoute/>}>
           

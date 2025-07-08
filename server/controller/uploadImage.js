@@ -3,8 +3,6 @@ import userModel from '../models/usersmodel.js'
 //I:\Dev WEEKEND Tasks\Task3\server\models\usersmodel.js
 //route controller post request
 export const imageUpload = async(req, res) =>{
-    
-    
 
     try{
         const image = req.file;
