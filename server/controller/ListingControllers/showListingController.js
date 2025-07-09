@@ -10,8 +10,7 @@ export const showListing = async(req,res)=>{
             return res.json({ success: false, message: "User ID is required" });
         }
         const listings = await Listing.find({ userRef: userId });
-        
-        console.log(listings);
+
         return res.json({ success: true, listings });
     }catch(err){
         

@@ -24,7 +24,7 @@ const ListingCards = () => {
             if(data.success){
                 console.log("✅ Listings found:", data.listings);
                 for(let i=0; i<data.listings.length; i++){
-                  console.log(data.listings[i].imageUrls[0]);
+                  console.log(data.listings[i]._id);
                   console.log("weee")
                 }
                 setListing(data.listings);
@@ -40,6 +40,31 @@ const ListingCards = () => {
         }
         fetchListing();
     },[currentUser._id])
+
+    const handleDelete =async (ItemId) =>{
+
+      try{
+        const res = await fetch("http://localhost:3000/api/list/delete",{
+          method:"PUT",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ listId: ItemId }),
+          credentials: 'include'
+        })
+        const data = await res.json();
+        if(data.success){
+          alert("✅ Listing deleted successfully.");
+          setListing((prev) => prev.filter(item => item._id !== ItemId));
+          
+        }else{
+          alert("Failed to delete listing: " + data.message);
+        }
+      }catch(error){
+        alert("Error happened during deleting the list");
+        console.log(error)
+      }
+    }
   return (
     <div className="max-w-3xl mx-auto space-y-4 p-4">
       <h2 className="text-xl font-bold">Your Listings</h2>
@@ -65,7 +90,9 @@ const ListingCards = () => {
               <button className="text-green-600 font-semibold hover:underline">
                 EDIT
               </button>
-              <button className="text-red-600 font-semibold hover:underline">
+              <button
+              onClick={() => handleDelete(item._id)}
+              className="text-red-600 font-semibold hover:underline">
                 DELETE
               </button>
             </div>

@@ -35,15 +35,23 @@ const listingSchema = new mongoose.Schema({
       type: Boolean,
       required: true,
     },
-    imageUrls: {
-      type: Array,
-      required: true,
-    },
+    imageUrls: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        public_id: {
+          type: String,
+          required: true,
+        },
+      }
+    ],
     userRef: {
       type: String,
       required: true,
     },
-
+    
 },
 { timestamps: true }
 );
