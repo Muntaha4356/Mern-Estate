@@ -5,6 +5,8 @@ import { uploadListImages } from '../controller/uploadListImages.js';
 import upload from '../utils/multer.js';
 import { showListing } from '../controller/ListingControllers/showListingController.js';
 import { deleteListController } from '../controller/ListingControllers/deleteListingController.js';
+import { editListing } from '../controller/ListingControllers/editListing.js';
+import { getListInfo } from '../controller/ListingControllers/getListInfo.js';
 
 const listRoutes= express.Router();
 
@@ -13,4 +15,6 @@ listRoutes.post('/create', createListing);
 listRoutes.post('/uploadlistimage',upload.single('image'), uploadListImages)
 listRoutes.get('/showlist',userAuth,showListing)
 listRoutes.put('/delete', deleteListController)
+listRoutes.get('/get/:id', getListInfo)
+listRoutes.put('/edit/:id', userAuth, editListing)
 export default listRoutes;
