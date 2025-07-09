@@ -79,7 +79,7 @@ const ListingCards = () => {
           >
             <div className="flex items-center gap-4">
               <img
-                src={item.imageUrls?.[0] || 'https://via.placeholder.com/100'}
+                src={item.imageUrls?.[0]?.url || 'https://via.placeholder.com/100'}
                 alt={item.name}
                 className="w-24 h-16 object-cover rounded-md"
               />

@@ -3,6 +3,8 @@ import Listing from "../models/listingModels.js";
 export const uploadListImages = async(req, res) => {
     try{
         const image = req.file;
+        console.log(image);
+        console.log("ent")
 
         const {listId} = req.body;
 
@@ -15,12 +17,17 @@ export const uploadListImages = async(req, res) => {
 
             console.log(uploadResult);
 
+
             const list = await Listing.findById(listId);
 
             if(!list){
                 return res.status(404).json({success: false, message: "User Not Found"})
             }
-            list.imageUrls.push(uploadResult.secure_url);
+            list.imageUrls.push({
+                url: uploadResult.secure_url,
+                public_id: uploadResult.public_id
+            });
+
             
             await list.save();
             return res.status(200).json({
