@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 
@@ -83,7 +84,7 @@ const ListingCards = () => {
                 alt={item.name}
                 className="w-24 h-16 object-cover rounded-md"
               />
-              <span className="font-medium text-gray-800">{item.name}</span>
+              <Link to={`/listpage/${item._id}`} className="font-medium text-gray-800">{item.name}</Link>
             </div>
 
             <div className="flex gap-4">
