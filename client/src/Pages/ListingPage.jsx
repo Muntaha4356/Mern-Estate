@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore from 'swiper';
 import { useSelector } from 'react-redux';
@@ -18,6 +18,10 @@ const ListingPage = () => {
     const [listing, setListing] =useState(null);
     const [loading, setLoading] = useState(false);
     const [copied, setCopied] =useState(false);
+    const [contact, setContact] = useState(false);
+    const [landlord, setLandlord] = useState(null);
+    const [message, setMessage] = useState()
+    const currentUser = useSelector((state) => state.user.currentUser);
     useEffect(() => {
         const fetchListing = async () => {
             try {
@@ -35,7 +39,41 @@ const ListingPage = () => {
 
         fetchListing();
         }, [id]);
+      
+        useEffect(() => {
+  const handleContact = async () => {
+    if (!listing || !listing.userRef) return;
 
+    try {
+      const res = await fetch('http://localhost:3000/api/list/getowner', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: listing.userRef }),
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            setLandlord(data.userData); // assumes you have setLandlord state
+          } else {
+            console.log('Failed to fetch landlord info:', data.message);
+          }
+        } catch (error) {
+          console.log('Error fetching landlord info:', error.message);
+        }
+      };
+
+      handleContact();
+    }, [listing]);
+
+
+    console.log(landlord)
+
+    const handleMessage = async(e)=>{
+      setMessage(e.target.value)
+      console.log(message)
+    }
   return (
     <main>
         {loading && <p className='text-center my-7 text 2xl '>Loading ...</p>}
@@ -75,9 +113,9 @@ const ListingPage = () => {
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
             <p className='text-2xl font-semibold'>
                 {listing.name} - ${' '} 
-                <div>Price {listing.offer ?  listing.regularPrice.toLocaleString('en-US')
+                <>Price {listing.offer ?  listing.regularPrice.toLocaleString('en-US')
                 : listing.regularPrice.toLocaleString('en-US')
-                }</div>
+                }</>
                 
             </p>
             <p className='text-slate-8 ' >
@@ -100,6 +138,22 @@ const ListingPage = () => {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
+            {
+              currentUser && !contact && String(listing.userRef) !== String(currentUser._id) &&
+              <button onClick={()=>setContact(true)} className='p-2 m-3 rounded text-2xl bg-green-600 hover:opacity-95'>Contact Landlord</button>
+
+            }
+            {
+              landlord && currentUser && contact && String(listing.userRef) !== String(currentUser._id) &&
+              <>
+                <p>Contact: <span className='font-semibold'>{landlord.name}</span> for <span className='font-semibold'>{listing.name.toLowerCase()}</span> </p>
+                <textarea className='w-full border p-3 rounded-lg' placeholder='Enter The Message Here' name="message" id="message" rows="3" value={message} onChange={handleMessage} ></textarea>
+                <Link to={
+                  `mailto:${landlord.email}?subject=Regarding ${listing.name}&body=${message}`
+                }  className='text-white uppercase text-center p-2 m-3 rounded text-2xl bg-blue-900 hover:opacity-95'>Send Message</Link>
+              </>
+              
+            }
           </div>
           
             </div>

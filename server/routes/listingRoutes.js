@@ -7,6 +7,7 @@ import { showListing } from '../controller/ListingControllers/showListingControl
 import { deleteListController } from '../controller/ListingControllers/deleteListingController.js';
 import { editListing } from '../controller/ListingControllers/editListing.js';
 import { getListInfo } from '../controller/ListingControllers/getListInfo.js';
+import { getOwnerInfo } from '../controller/ListingControllers/getOwnerInfo.js';
 
 const listRoutes= express.Router();
 
@@ -17,4 +18,5 @@ listRoutes.get('/showlist',userAuth,showListing)
 listRoutes.put('/delete', deleteListController)
 listRoutes.get('/get/:id', getListInfo)
 listRoutes.put('/edit/:id', userAuth, editListing)
+listRoutes.post('/getowner', getOwnerInfo)
 export default listRoutes;
