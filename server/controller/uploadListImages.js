@@ -4,7 +4,6 @@ export const uploadListImages = async(req, res) => {
     try{
         const image = req.file;
         console.log(image);
-        console.log("ent")
 
         const {listId} = req.body;
 

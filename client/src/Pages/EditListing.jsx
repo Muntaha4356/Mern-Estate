@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 const EditListing = () => {
+    const [loading, setLoading] = useState(false);
     const { id } = useParams(); 
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -20,7 +21,15 @@ const EditListing = () => {
         imageUrls: [],
         userRef:currentUser._id,
         //sell and rents are types
-      });
+    });
+
+
+    const [existingImages, setExistingImages] = useState([]);
+    const [imagesToDelete, setImagesToDelete] = useState([]);
+    const [newFiles, setNewFiles] = useState([]);
+    const [newPreviews, setNewPreviews] = useState([]);
+
+    
 
 
     useEffect(()=> {
@@ -31,6 +40,8 @@ const EditListing = () => {
 
                 if(data.success) {
                     setFormData(data.listing);
+                    setExistingImages(data.listing.imageUrls || []);
+                    
                     
                 }else {
                     alert('Listing not found');
@@ -41,7 +52,10 @@ const EditListing = () => {
         };
         fetchListing();
     }, [id, currentUser])
-    console.log(formData);
+    console.log('newFiles',newFiles)
+    console.log('existingImages',existingImages);
+    console.log('imagesToDelete',imagesToDelete);
+    
 
     const handleChange = (e) =>{
         const { name, value, type, checked } = e.target;
@@ -51,27 +65,61 @@ const EditListing = () => {
         }));
     }
 
+    //
+
+    const handleRemoveExistingImage = (publicId) => {
+        setImagesToDelete((prev) => [...prev, publicId]);
+        setExistingImages((prev) => prev.filter((img) => img.public_id !== publicId));
+    };
+
     const handleSubmit = async (e) =>{
         e.preventDefault();
 
         try{
+            setLoading(true);
             const updateRes = await fetch(`http://localhost:3000/api/list/edit/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify(formData),
+                body: JSON.stringify({...formData,
+                toDeleteImages: imagesToDelete  
+            }),
             });
 
             const updateData = await updateRes.json();
             if (!updateData.success) throw new Error(updateData.message);
+            for (const file of newFiles) {
+                const imageData = new FormData();
+                imageData.append('listId', id);
+                imageData.append('image', file);
+                try{
+                    const imgRes = await fetch('http://localhost:3000/api/list/uploadlistimage',{
+                    method: 'POST',
+                    body: imageData
+                });
+                const imgData = await imgRes.json();
+                if (!imgData.success) {
+                    console.warn('⚠️ Failed to upload image:', imgData.message);
+                }
 
+                }catch(uploadErr){
+                    console.error('Image upload error:', uploadErr);
+                }
+                await fetch('http://localhost:3000/api/list/uploadlistimage',{
+                    method: 'POST',
+                    body: imageData
+                })
+            }
+            setNewFiles([]);
+            setNewPreviews([]);
             alert('✅ Listing updated!');
             navigate('/profile'); 
 
         }catch (err) {
             console.error(err);
-            alert('❌ Failed to update listing');
+            alert('Failed to update listing');
         }
+        setLoading(false);
 
     }
   return (
@@ -192,43 +240,73 @@ const EditListing = () => {
           />
           <span>Regular price ($ / Month)</span>
         </div>
+        {/* New Images */}
+        <input
+        type="file"
+        multiple
+        accept="image/*"
+        onChange={(e) => {
+            const files = Array.from(e.target.files);
+            setNewFiles(files);
 
-        {/* <div>
-          <label className="block mb-1 font-semibold">Images:</label>
-          <p className="text-sm mb-1 text-gray-500">The first image will be the cover (max 6)</p>
-          <input
-            type="file"
-            name="images"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-            className="block"
-          />
-          
-          
-        </div> */}
+            const previews = files.map(file => URL.createObjectURL(file));
+            setNewPreviews(previews);
+        }}
+        />
 
-
-        {/* {previewUrls.length > 0 && (
-          <div className="grid grid-cols-3 gap-3 mt-4">
-            {previewUrls.map((url, idx) => (
-              <div key={idx} className="relative group">
-                <img
-                  src={url}
-                  alt={`Preview ${idx}`}
-                  className="w-full h-32 object-cover rounded shadow"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleImageDelete(idx)}
-                  className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded-full hover:bg-red-700"
-                >
-                  ✕
-                </button>
-              </div>
+        {newPreviews.length > 0 && (
+        <div className="grid grid-cols-3 gap-3 mt-4">
+            {newPreviews.map((url, idx) => (
+              <div key={idx} className="relative group">  
+            <img
+                key={idx}
+                src={url}
+                alt={`New Preview ${idx}`}
+                className="w-full h-32 object-cover rounded shadow"
+            />
+            <button
+          type="button"
+          onClick={() => {
+            const updatedPreviews = [...newPreviews];
+            const updatedFiles = [...newFiles];
+            updatedPreviews.splice(idx, 1);
+            updatedFiles.splice(idx, 1);
+            setNewPreviews(updatedPreviews);
+            setNewFiles(updatedFiles);
+          }}
+          className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded-full hover:bg-red-700"
+        >
+          ✕
+        </button>
+        </div>
             ))}
-          </div>
-        )} */}
+        </div>
+        )}
+
+
+        {/* Existing Images */}
+        
+        
+        {existingImages.length > 0 && (
+            <div className="grid grid-cols-3 gap-3 mt-4">
+                {existingImages.map((img, idx) => (
+                <div key={idx} className="relative group">
+                        <img
+                        src={img.url}
+                        alt={`Image ${idx}`}
+                        className="w-full h-32 object-cover rounded shadow"
+                        />
+                        <button
+                        type="button"
+                        onClick={() => handleRemoveExistingImage(img.public_id)}
+                        className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded-full hover:bg-red-700"
+                        >
+                        ✕
+                        </button>
+                    </div>
+                    ))}
+                </div>
+                )}
 
 
 

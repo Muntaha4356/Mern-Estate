@@ -13,6 +13,7 @@ export const deleteListController =async (req,res) => {
             return res.json({ success: false, message: "Listing not found" });
         }
         for (const image of list.imageUrls) {
+            console.log(image);
             if (image.public_id) {
                 try {
                 await cloudinary.uploader.destroy(image.public_id);
@@ -22,6 +23,7 @@ export const deleteListController =async (req,res) => {
             }
         }
         const deletedListing = await Listing.findByIdAndDelete(listId);
+        
         if(!deletedListing){
             return res.json({success: false, message: "List not found in database"})
         }
