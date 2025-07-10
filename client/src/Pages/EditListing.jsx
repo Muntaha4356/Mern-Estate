@@ -99,16 +99,13 @@ const EditListing = () => {
                 });
                 const imgData = await imgRes.json();
                 if (!imgData.success) {
-                    console.warn('⚠️ Failed to upload image:', imgData.message);
+                    console.warn('Failed to upload image:', imgData.message);
                 }
 
                 }catch(uploadErr){
                     console.error('Image upload error:', uploadErr);
                 }
-                await fetch('http://localhost:3000/api/list/uploadlistimage',{
-                    method: 'POST',
-                    body: imageData
-                })
+                
             }
             setNewFiles([]);
             setNewPreviews([]);

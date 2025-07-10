@@ -23,12 +23,17 @@ export const editListing = async (req, res) => {
 
     console.log("Sanitized toDeleteImages array:", toDeleteImages);
 console.log("Type check:", Array.isArray(toDeleteImages));
+    const objectIdsToRemove = [];
     // Delete from Cloudinary
     for (const public_id of toDeleteImages) {
         console.log(typeof public_id)
         const publicId = public_id;
         console.log("Trying to delete:", public_id);
       try {
+        const match = listing.imageUrls.find(img => img.public_id === public_id);
+          if (match) {
+            objectIdsToRemove.push(match._id);
+          }
         const result = await cloudinary.uploader.destroy(public_id);
         console.log("Cloudinary response:", result);
         if (result.result === "ok") {
@@ -36,15 +41,8 @@ console.log("Type check:", Array.isArray(toDeleteImages));
         // listing.imageUrls = listing.imageUrls.filter(
         //   (img) => img.public_id !== publicId
         // );
-        for (let i=0; i<listing.imageUrls.length; i++){
-          if(listing.imageUrls[i].public_id===public_id){
-            const objectid= listing.imageUrls[i]._id;
-            console.log(objectid);
-            listing.imageUrls.pull({ _id: objectid });
-          }
-          
-        };
-       }
+        console.log("meow")
+        }
       } catch (err) {
         console.log("Camehere tiii");
         console.error(`Failed to delete ${publicId}`, err);
@@ -54,6 +52,12 @@ console.log("Type check:", Array.isArray(toDeleteImages));
     // listing.imageUrls = listing.imageUrls.filter(
     //   (img) => !toDeleteImages.includes(img.public_id)
     // );
+
+
+    // Step 2: Pull all matched ObjectIds
+    for (const objId of objectIdsToRemove) {
+      listing.imageUrls.pull({ _id: objId });
+    }
 
     // Update other listing fields
     Object.assign(listing, otherFields);
