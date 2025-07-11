@@ -8,6 +8,7 @@ import { deleteListController } from '../controller/ListingControllers/deleteLis
 import { editListing } from '../controller/ListingControllers/editListing.js';
 import { getListInfo } from '../controller/ListingControllers/getListInfo.js';
 import { getOwnerInfo } from '../controller/ListingControllers/getOwnerInfo.js';
+import { getListings } from '../controller/ListingControllers/GetMultipleListing.js';
 
 const listRoutes= express.Router();
 
@@ -19,4 +20,5 @@ listRoutes.put('/delete', deleteListController)
 listRoutes.get('/get/:id', getListInfo)
 listRoutes.put('/edit/:id', userAuth, editListing)
 listRoutes.post('/getowner', getOwnerInfo)
+listRoutes.get('/search',userAuth, getListings)
 export default listRoutes;

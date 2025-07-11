@@ -32,3 +32,15 @@ useDispatch()	Lets you send actions to the store	Example: dispatch(addLemon())
 
 
 in useAuth middleware i have added method of token
+
+
+
+limit(n)
+Restricts the number of documents (listings) returned.
+
+For example, limit(9) returns only 9 listings, even if the database has thousands.
+
+✅ skip(n)
+Skips the first n results and starts returning from the (n+1)-th document.
+
+Useful for pages beyond the first.
