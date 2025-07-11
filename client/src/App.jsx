@@ -13,6 +13,7 @@ import CreateListing from './Pages/CreateListing'
 import ListingCards from './Pages/ListingCards'
 import EditListing from './Pages/EditListing'
 import ListingPage from './Pages/ListingPage'
+import Search from './Pages/Search'
 function App() {
 
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path='/userlist' element={<ListingCards/>  }/>
             <Route path='/editList/:id' element={ <EditListing/> } />
             <Route path='/listpage/:id' element={<ListingPage/>} />
+            <Route path='/search' element={<Search/> } />
           </Route>
           <Route element={<UnProtectedRoute/>}>
           

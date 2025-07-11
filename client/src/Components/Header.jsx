@@ -1,11 +1,15 @@
 import React from 'react'
 import { FaSearch } from 'react-icons/fa';
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 const Header = ({children}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [currentUser, setCurrentUser] = useState()
+    const [searchTerm, setSearchTerm]= useState('')
+    const navigate = useNavigate();
+    const location = useLocation();
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/auth/isLoggedIn", { withCredentials: true }) // must match backend route exactly
@@ -20,8 +24,23 @@ const Header = ({children}) => {
         setIsAuthenticated(false);
       });
   }, []);
+
+  useEffect(()=>{
+    const urlParams= new URLSearchParams(location.search);
+    const urlSearchTerm = urlParams.get('searchTerm');
+    if(urlSearchTerm){
+      setSearchTerm(urlSearchTerm);
+    }
+  }, [location.search]);
+
   const handleSearchSubmit = (e)=>{
-    console.log("searched");
+    e.preventDefault();
+    //geting info from url
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('searchTerm', searchTerm );
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+
   }
   return (
     <>
@@ -40,8 +59,9 @@ const Header = ({children}) => {
                 <input type="text" 
                 placeholder='Search...' 
                 className='bg-slate-100 p-3 rounded-lg flex items-center outline-none h-2'
+                onChange={(e) => setSearchTerm(e.target.value)}
                  />
-                <button>
+                <button type='submit'>
                     <FaSearch className='text-slate-600'/>
                 </button>
             </form>
