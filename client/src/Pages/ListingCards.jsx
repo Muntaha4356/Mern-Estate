@@ -88,9 +88,9 @@ const ListingCards = () => {
             </div>
 
             <div className="flex gap-4">
-              <button className="text-green-600 font-semibold hover:underline">
+              <Link to={`/editList/${item._id}`} className="text-green-600 font-semibold hover:underline">
                 EDIT
-              </button>
+              </Link>
               <button
               onClick={() => handleDelete(item._id)}
               className="text-red-600 font-semibold hover:underline">

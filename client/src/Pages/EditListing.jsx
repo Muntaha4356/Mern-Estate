@@ -67,8 +67,8 @@ const EditListing = () => {
 
     //
 
-    const handleRemoveExistingImage = (publicId) => {
-        setImagesToDelete((prev) => [...prev, publicId]);
+    const handleRemoveExistingImage = (publicId, imageId) => {
+        setImagesToDelete((prev) => [...prev, { _id: imageId, public_id: publicId }]);
         setExistingImages((prev) => prev.filter((img) => img.public_id !== publicId));
     };
 
@@ -295,7 +295,7 @@ const EditListing = () => {
                         />
                         <button
                         type="button"
-                        onClick={() => handleRemoveExistingImage(img.public_id)}
+                        onClick={() => handleRemoveExistingImage(img.public_id, img._id)}
                         className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-1 rounded-full hover:bg-red-700"
                         >
                         ✕
