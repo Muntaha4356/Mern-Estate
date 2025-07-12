@@ -25,7 +25,7 @@ const ListingPage = () => {
     useEffect(() => {
         const fetchListing = async () => {
             try {
-            const res = await fetch(`http://localhost:3000/api/list/get/${id}`);
+            const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/get/${id}`);
             const data = await res.json();
             if (data.success) {
                 setListing(data.listing);
@@ -45,7 +45,7 @@ const ListingPage = () => {
     if (!listing || !listing.userRef) return;
 
     try {
-      const res = await fetch('http://localhost:3000/api/list/getowner', {
+      const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/getowner`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

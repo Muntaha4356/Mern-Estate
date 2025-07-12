@@ -16,7 +16,7 @@ const ListingCards = () => {
     useEffect(()=>{
         const fetchListing = async () => {
             try{
-                const res= await fetch('http://localhost:3000/api/list/showlist',{
+                const res= await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/showlist`,{
                 method:'GET',
                 credentials:'include'
             });
@@ -45,7 +45,7 @@ const ListingCards = () => {
     const handleDelete =async (ItemId) =>{
 
       try{
-        const res = await fetch("http://localhost:3000/api/list/delete",{
+        const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/delete`,{
           method:"PUT",
           headers: {
             'Content-Type': 'application/json'

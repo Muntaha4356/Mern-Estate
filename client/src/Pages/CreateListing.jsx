@@ -36,7 +36,7 @@ const CreateListing = () => {
     const handleSubmit= async(e)=>{
         e.preventDefault();
         try{
-          const res = await fetch('http://localhost:3000/api/list/create', {
+          const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/create`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -73,7 +73,7 @@ const CreateListing = () => {
           formData.append('image', files[i]);
           formData.append('listId', listIdPassed);
           promises.push(
-            fetch('http://localhost:3000/api/list/uploadlistimage',{
+            fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/uploadlistimage`,{
               method:"POST",
               body: formData, 
               credentials: 'include'

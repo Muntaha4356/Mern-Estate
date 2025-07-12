@@ -8,7 +8,7 @@ const ListingCards = () => {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/list/showlist', {
+        const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/showlist`, {
           method: 'GET',
           credentials: 'include',
         });

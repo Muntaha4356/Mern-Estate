@@ -19,7 +19,7 @@ const About = () => {
 
     const formData = new FormData();
     formData.append("image", image);
-    const response = await fetch("http://localhost:3000/api/user/upload-image", {
+    const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/user/upload-image`, {
     method: "POST",
     body: formData,
     credentials: 'include'

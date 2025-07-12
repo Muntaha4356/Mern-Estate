@@ -35,7 +35,7 @@ const EditListing = () => {
     useEffect(()=> {
         const fetchListing = async() =>{
             try{
-                const res = await fetch(`http://localhost:3000/api/list/get/${id}`);
+                const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/get/${id}`);
                 const data = await res.json();
 
                 if(data.success) {
@@ -77,7 +77,7 @@ const EditListing = () => {
 
         try{
             setLoading(true);
-            const updateRes = await fetch(`http://localhost:3000/api/list/edit/${id}`, {
+            const updateRes = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/edit/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -93,7 +93,7 @@ const EditListing = () => {
                 imageData.append('listId', id);
                 imageData.append('image', file);
                 try{
-                    const imgRes = await fetch('http://localhost:3000/api/list/uploadlistimage',{
+                    const imgRes = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/uploadlistimage`,{
                     method: 'POST',
                     body: imageData
                 });

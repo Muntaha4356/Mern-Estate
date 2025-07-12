@@ -14,7 +14,7 @@ const Profile = () => {
     useEffect(() => {
       const fetchUser = async () => {
         try {
-          const res = await fetch('http://localhost:3000/api/user/data', {
+          const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/user/data`, {
       method: 'GET',
       credentials: 'include' 
     }
@@ -41,7 +41,7 @@ const Profile = () => {
 
     useEffect(() => {
         axios
-          .get("http://localhost:3000/api/auth/isLoggedIn", { withCredentials: true }) 
+          .get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/auth/isLoggedIn`, { withCredentials: true }) 
           .then((res) => {
             console.log(res.success);
             setCurrentUser(res.data.user);
@@ -60,7 +60,7 @@ const Profile = () => {
       };
 
       try {
-        const res = await fetch('http://localhost:3000/api/user/updateUser', {
+        const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/user/updateUser`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json' 
@@ -96,7 +96,7 @@ const Profile = () => {
 
     const formData = new FormData();
     formData.append("image", image);
-    const response = await fetch("http://localhost:3000/api/user/upload-image", {
+    const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/user/upload-image`, {
     method: "POST",
     body: formData,
     credentials: 'include'
@@ -115,7 +115,7 @@ const Profile = () => {
    const handleDelete = async (emailvalue) =>{
       console.log(emailvalue);
       try{
-        const res=await fetch("http://localhost:3000/api/user/delete", {
+        const res=await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/user/delete`, {
           method:"PUT",
           headers:{
             "Content-Type":"application/json",
@@ -139,7 +139,7 @@ const Profile = () => {
 
     const handleLogout = async(e)=>{
     try{
-      const response = await fetch('http://localhost:3000/api/auth/logout', {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/auth/logout`, {
         method:'POST',
         credentials: 'include',
         headers:{

@@ -12,7 +12,7 @@ const Header = ({children}) => {
     const location = useLocation();
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/auth/isLoggedIn", { withCredentials: true }) // must match backend route exactly
+      .get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/auth/isLoggedIn`, { withCredentials: true }) // must match backend route exactly
       .then((res) => {
         console.log(res.success);
         setIsAuthenticated(res.data.success);

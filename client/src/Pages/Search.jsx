@@ -51,8 +51,8 @@ const Search = () => {
       setLoading(true);
       setShowMore(false);
       const searchQuery = urlParams.toString();
-      
-      const res = await fetch(`http://localhost:3000/api/list/search?${searchQuery}`);
+
+      const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/search?${searchQuery}`);
       const data = await res.json();
       console.log(data,"data")
       if (data.length > 8) {
