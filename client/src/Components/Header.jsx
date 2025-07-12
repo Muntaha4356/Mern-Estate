@@ -70,9 +70,7 @@ const Header = ({children}) => {
                 <li className='pl-3 hover:underline '>Home</li>
                 </Link>
                 
-                <Link to='/about'>
-                <li className='pl-3 hover:underline'>About</li>
-                </Link>
+                
                 
                 {isAuthenticated ? (
                     <Link to='/profile'>

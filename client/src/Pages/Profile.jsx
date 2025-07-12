@@ -149,7 +149,7 @@ const Profile = () => {
       const result = await response.json();
       if(result.success){
         alert('LogOut');
-        navigate('/unauth');
+        navigate('/');
       }else {
         alert(`Error: ${result.message}`);
       }
