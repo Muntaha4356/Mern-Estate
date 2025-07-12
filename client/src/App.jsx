@@ -7,13 +7,13 @@ import Signup from './Pages/Signup'
 import Profile from './Pages/Profile'
 import Header from './Components/Header'
 import About from './Pages/About'
-import ProtectedRoute from '../../../Mern-Auth/client/vite-project/src/Components/protectionFunctions/ProtectedRoute'
-import UnProtectedRoute from '../../../Mern-Auth/client/vite-project/src/Components/protectionFunctions/UnprotectedRoute'
 import CreateListing from './Pages/CreateListing'
 import ListingCards from './Pages/ListingCards'
 import EditListing from './Pages/EditListing'
 import ListingPage from './Pages/ListingPage'
 import Search from './Pages/Search'
+import ProtectedRoute from './Components/ProtectedRoute'
+import UnProtectedRoute from './Components/UnproductedRoute'
 function App() {
 
   return (
