@@ -11,8 +11,12 @@ import { deleteContoller } from '../controller/deleteController.js';
 const userRoutes= express.Router();
 
 userRoutes.get('/data', userAuth, getUserData)
-userRoutes.put('/updateUser', upDateUser)
+userRoutes.put('/updateUser', userAuth, updateUserData)
 userRoutes.post('/upload-image',userAuth, upload.single('image'), imageUpload)
 userRoutes.put('/delete', userAuth, deleteContoller)
 
 export default userRoutes;
+
+
+
+

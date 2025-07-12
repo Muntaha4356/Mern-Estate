@@ -56,14 +56,16 @@ const Profile = () => {
 
       // formData.append('profilepic', profilepic); // this is the File object
       const updatedUser = {
-        userId,
         name
       };
 
       try {
         const res = await fetch('http://localhost:3000/api/user/updateUser', {
           method: 'PUT',
-          body: JSON.stringify(updatedUser), // don't set Content-Type manually
+          headers: {
+            'Content-Type': 'application/json' 
+          },
+          body: JSON.stringify(updatedUser),
           credentials: 'include' 
         });
 

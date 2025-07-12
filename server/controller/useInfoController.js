@@ -29,7 +29,7 @@ export const getUserData = async(req, res) =>{
 
 
 export const upDateUser = async (req, res) =>{
-    const {userId, name, profilepic} = req.body;
+    const {name} = req.body;
 
     try {
         let profilepicUrl = req.body.existingPic; // fallback
@@ -59,7 +59,7 @@ export const upDateUser = async (req, res) =>{
             }
         );
 
-        // Pipe the file buffer to Cloudinary
+        // Pipe the file buffer  to Cloudinary
         const stream = require('stream');
         const bufferStream = new stream.PassThrough();
         bufferStream.end(req.file.buffer);
@@ -78,3 +78,7 @@ export const upDateUser = async (req, res) =>{
         res.status(500).json({ success: false, message: 'Update failed' });
     }
 }
+
+
+
+
