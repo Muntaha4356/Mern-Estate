@@ -24,11 +24,18 @@ app.use(express.json());
 
 app.use(cookieParser());
 //  ||'https://mern-estate-3x92430jn-muntaha4356s-projects.vercel.app' 
+const allowedOrigins = ['https://mern-estate-3x92430jn-muntaha4356s-projects.vercel.app'];
+
 app.use(cors({
-    origin: 'http://localhost:5173',
-    credentials: true})) //sending cookies in response tofrontend
-
-
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // if you are sending cookies or auth headers
+}));
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRoutes);
 app.use('/api/list',listRoutes);
