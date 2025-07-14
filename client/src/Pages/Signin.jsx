@@ -27,6 +27,7 @@ const Signin = () => {
     try{
       const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/auth/login`, {
         method: 'POST',
+        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
         },

@@ -23,20 +23,12 @@ connectDb();
 app.use(express.json());
 
 app.use(cookieParser());
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://mern-estate.vercel.app', // your actual deployed frontend
-  'https://mern-estate-<yourProjectId>.vercel.app' // optional: if your URL has a dynamic ID
-];
+
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true,
-}));
+    origin: 'https://mern-estate-3x92430jn-muntaha4356s-projects.vercel.app' || process.env.FRONTEND,
+    credentials: true})) //sending cookies in response tofrontend
+
+
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRoutes);
 app.use('/api/list',listRoutes);

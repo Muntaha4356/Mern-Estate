@@ -35,7 +35,7 @@ const EditListing = () => {
     useEffect(()=> {
         const fetchListing = async() =>{
             try{
-                const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/get/${id}`);
+                const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/get/${id}`, {withCredentials: true,});
                 const data = await res.json();
 
                 if(data.success) {

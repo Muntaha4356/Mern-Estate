@@ -11,6 +11,7 @@ const ListingCards = () => {
         const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/showlist`, {
           method: 'GET',
           credentials: 'include',
+          withCredentials: true,
         });
         const data = await res.json();
 

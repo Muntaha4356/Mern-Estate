@@ -51,6 +51,7 @@ const ListingPage = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ userId: listing.userRef }),
+            withCredentials: true,
           });
 
           const data = await res.json();

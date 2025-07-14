@@ -75,6 +75,7 @@ const CreateListing = () => {
           promises.push(
             fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/uploadlistimage`,{
               method:"POST",
+              withCredentials: true,
               body: formData, 
               credentials: 'include'
             }).then(res => res.json()

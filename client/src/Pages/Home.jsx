@@ -6,7 +6,7 @@ const Home = () => {
   useEffect(()=>{
     const fetchListing = async(e) => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/getAll`);
+        const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/list/getAll`,{withCredentials: true,});
         const data = await res.json();
         console.log(data);
         setListings(data);

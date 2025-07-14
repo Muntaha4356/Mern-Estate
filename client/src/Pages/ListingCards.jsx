@@ -51,7 +51,8 @@ const ListingCards = () => {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ listId: ItemId }),
-          credentials: 'include'
+          credentials: 'include',
+          withCredentials: true,
         })
         const data = await res.json();
         if(data.success){

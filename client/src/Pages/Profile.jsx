@@ -16,7 +16,8 @@ const Profile = () => {
         try {
           const res = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/user/data`, {
       method: 'GET',
-      credentials: 'include' 
+      credentials: 'include' ,
+      withCredentials: true,
     }
           );
           const data = await res.json();
@@ -66,6 +67,7 @@ const Profile = () => {
             'Content-Type': 'application/json' 
           },
           body: JSON.stringify(updatedUser),
+          withCredentials: true,
           credentials: 'include' 
         });
 
