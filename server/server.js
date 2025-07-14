@@ -23,9 +23,9 @@ connectDb();
 app.use(express.json());
 
 app.use(cookieParser());
-
+//  ||'https://mern-estate-3x92430jn-muntaha4356s-projects.vercel.app' 
 app.use(cors({
-    origin: 'https://mern-estate-3x92430jn-muntaha4356s-projects.vercel.app' || process.env.FRONTEND,
+    origin: 'http://localhost:5173',
     credentials: true})) //sending cookies in response tofrontend
 
 

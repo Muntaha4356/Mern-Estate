@@ -22,7 +22,8 @@ const About = () => {
     const response = await fetch(`${import.meta.env.VITE_REACT_APP_BACKEND_BASE_URL}/api/user/upload-image`, {
     method: "POST",
     body: formData,
-    credentials: 'include'
+    credentials: 'include',
+    withCredentials: true,
   });
     const result = await response.json();
     if(result.success){
