@@ -30,6 +30,7 @@ export const getUserData = async(req, res) =>{
 
 export const upDateUser = async (req, res) =>{
     const {name} = req.body;
+    const userId = req.user._id;
 
     try {
         let profilepicUrl = req.body.existingPic; // fallback
