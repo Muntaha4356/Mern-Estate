@@ -1,5 +1,6 @@
 import userModel from "../models/usersmodel.js";
 import cloudinary from '../utils/cloudinary.js';
+import { PassThrough } from 'stream'; 
 import axios from 'axios';
 export const getUserData = async(req, res) =>{
     try{
@@ -60,9 +61,7 @@ export const upDateUser = async (req, res) =>{
             }
         );
 
-        // Pipe the file buffer  to Cloudinary
-        const stream = require('stream');
-        const bufferStream = new stream.PassThrough();
+        const bufferStream = new PassThrough(); 
         bufferStream.end(req.file.buffer);
         bufferStream.pipe(uploadRes);
         } else {
