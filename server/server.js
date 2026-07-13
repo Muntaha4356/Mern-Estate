@@ -19,7 +19,7 @@ connectDb();
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigins = ['https://mern-estate-3x92430jn-muntaha4356s-projects.vercel.app'];
+const allowedOrigins = ['https://mern-estate-green.vercel.app'];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
